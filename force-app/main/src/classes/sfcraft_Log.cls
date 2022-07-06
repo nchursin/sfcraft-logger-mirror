@@ -9,16 +9,17 @@ public inherited sharing class sfcraft_Log {
 
     private String message;
     private String stackTrace;
+    private String source;
     private String scope;
     private Severities severity;
 
-    public sfcraft_Log(String scope) {
-        this.scope = scope;
+    public sfcraft_Log(String source) {
+        this.source = source;
         this.severity = Severities.INFO;
     }
 
-    public sfcraft_Log(Exception ex, String scope) {
-        this(scope);
+    public sfcraft_Log(Exception ex, String source) {
+        this(source);
         this.setMessage(ex.getMessage());
         this.setDetails(ex.getStackTraceString());
         this.setSeverity(Severities.ERROR);
@@ -29,8 +30,13 @@ public inherited sharing class sfcraft_Log {
         record.put(config.getDetailsFieldName(), this.stackTrace);
         record.put(config.getMessageFieldName(), this.message);
         record.put(config.getSeverityFieldName(), this.severity);
+        record.put(config.getSourceFieldName(), this.source);
         record.put(config.getScopeFieldName(), this.scope);
         return record;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     public void setMessage(String message) {

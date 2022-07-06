@@ -35,6 +35,10 @@ public without sharing class sfcraft_LogConfig {
         return this.config.sfcraft_SeverityField__c;
     }
 
+    public String getSourceFieldName() {
+        return this.config.sfcraft_SeverityField__c;
+    }
+
     public SObjectType getLogSObjectType() {
         if (null == this.sobjType) {
             String sobjTypeName = this.config.sfcraft_LogObject__c;

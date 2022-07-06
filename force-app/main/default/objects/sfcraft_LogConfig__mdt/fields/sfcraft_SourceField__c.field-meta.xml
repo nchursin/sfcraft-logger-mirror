@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>sfcraft_ScopeField__c</fullName>
-    <description>Field to store scope, e.g. input arguments, processed data. Must be text or long text</description>
+    <fullName>sfcraft_SourceField__c</fullName>
+    <description>Field to store source, e.g. class name + method name. Must be text</description>
     <externalId>false</externalId>
     <fieldManageability>DeveloperControlled</fieldManageability>
-    <label>Scope Field</label>
+    <label>Source Field</label>
     <metadataRelationshipControllingField>sfcraft_LogConfig__mdt.sfcraft_LogObject__c</metadataRelationshipControllingField>
     <referenceTo>FieldDefinition</referenceTo>
-    <relationshipLabel>SfCraft_Log_Configs Scope</relationshipLabel>
-    <relationshipName>sfcraft_LogConfigsScope</relationshipName>
+    <relationshipLabel>SfCraft_Log_Configs Source</relationshipLabel>
+    <relationshipName>sfcraft_LogConfigsSource</relationshipName>
     <required>true</required>
     <type>MetadataRelationship</type>
     <unique>false</unique>
