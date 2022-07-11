@@ -3,7 +3,7 @@ public inherited sharing class sfcraft_Logger {
     private static sfcraft_Logger singleton;
 
     private String source;
-    private sfcraft_AdditionalLogData additionalData;
+    private Type additionalDataType;
 
     private List<sfcraft_Log> storedLogs {
         get {
@@ -29,14 +29,14 @@ public inherited sharing class sfcraft_Logger {
         this(source, null);
     }
 
-    public sfcraft_Logger(sfcraft_AdditionalLogData additionalData) {
-        this(null, additionalData);
+    public sfcraft_Logger(Type additionalDataType) {
+        this(null, additionalDataType);
     }
 
-    public sfcraft_Logger(String source, sfcraft_AdditionalLogData additionalData) {
+    public sfcraft_Logger(String source, Type additionalDataType) {
         this();
         this.source = source;
-        this.additionalData = additionalData;
+        this.additionalDataType = additionalDataType;
     }
 
     public sfcraft_Log createLog() {
@@ -52,7 +52,8 @@ public inherited sharing class sfcraft_Logger {
     }
 
     public sfcraft_Log createLog(String source) {
-        sfcraft_Log infoLog = new sfcraft_Log(source);
+        sfcraft_AdditionalLogData additionalData = (sfcraft_AdditionalLogData) this.additionalDataType.newInstance();
+        sfcraft_Log infoLog = new sfcraft_Log(source, additionalData);
         this.storedLogs.add(infoLog);
         return infoLog;
     }

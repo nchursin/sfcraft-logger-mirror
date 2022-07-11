@@ -15,9 +15,10 @@ public virtual class sfcraft_Log {
 
     private sfcraft_AdditionalLogData additionalData;
 
-    public sfcraft_Log(String source) {
+    public sfcraft_Log(String source, sfcraft_AdditionalLogData additionalData) {
         this.source = source;
         this.severity = Severities.INFO;
+        this.additionalData = additionalData;
     }
 
     public SObject getLogRecord() {
@@ -27,7 +28,9 @@ public virtual class sfcraft_Log {
         record.put(config.getSeverityFieldName(), this.severity);
         record.put(config.getSourceFieldName(), this.source);
         record.put(config.getScopeFieldName(), this.scope);
-        record = this.additionalData.enrichLog(record);
+        if (null != this.additionalData) {
+            record = this.additionalData.enrichLog(record);
+        }
         return record;
     }
 
