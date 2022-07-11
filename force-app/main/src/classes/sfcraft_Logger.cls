@@ -5,12 +5,12 @@ public inherited sharing class sfcraft_Logger {
     private String source;
     private Type additionalDataType;
 
-    private List<sfcraft_Log> storedLogs {
+    private static List<sfcraft_Log> storedLogs {
         get {
-            if (null == this.storedLogs) {
-                this.storedLogs = new List<sfcraft_Log>();
+            if (null == storedLogs) {
+                storedLogs = new List<sfcraft_Log>();
             }
-            return this.storedLogs;
+            return storedLogs;
         }
         set;
     }
@@ -60,7 +60,7 @@ public inherited sharing class sfcraft_Logger {
             additionalData = (sfcraft_AdditionalLogData) this.additionalDataType.newInstance();
         }
         sfcraft_Log infoLog = new sfcraft_Log(source, additionalData);
-        this.storedLogs.add(infoLog);
+        storedLogs.add(infoLog);
         return infoLog;
     }
 
@@ -78,19 +78,19 @@ public inherited sharing class sfcraft_Logger {
         return errLog;
     }
 
-    public void insertLogs() {
-        if(this.storedLogs != null && this.storedLogs.isEmpty() == False) {
+    public static void insertLogs() {
+        if(storedLogs != null && storedLogs.isEmpty() == False) {
             List<SObject> logsToInsert = new List<SObject>();
-            for (sfcraft_Log nupayLog : this.storedLogs) {
+            for (sfcraft_Log nupayLog : storedLogs) {
                 logsToInsert.add(nupayLog.getLogRecord());
             }
             // unsafe DML because anyone should be able to create logs
             insert logsToInsert;
-            this.storedLogs.clear();
+            storedLogs.clear();
         }
     }
 
-    public List<sfcraft_Log> getStoredLogs() {
-        return this.storedLogs;
+    public static List<sfcraft_Log> getStoredLogs() {
+        return storedLogs;
     }
 }
