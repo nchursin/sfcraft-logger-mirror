@@ -1,47 +1,79 @@
 public inherited sharing class sfcraft_Logger {
-    private static List<sfcraft_Log> storedLogs {
+
+    private static sfcraft_Logger singleton;
+
+    private String source;
+
+    private List<sfcraft_Log> storedLogs {
         get {
-            if (null == storedLogs) {
-                storedLogs = new List<sfcraft_Log>();
+            if (null == this.storedLogs) {
+                this.storedLogs = new List<sfcraft_Log>();
             }
-            return storedLogs;
+            return this.storedLogs;
         }
         set;
     }
 
-    public static sfcraft_Log createLog(String scope) {
-        sfcraft_Log infoLog = new sfcraft_Log(scope);
-        storedLogs.add(infoLog);
+    public static sfcraft_Logger getSingleton() {
+        if (null == singleton) {
+            singleton = new sfcraft_Logger();
+        }
+        return singleton;
+    }
+
+    public sfcraft_Logger() {
+    }
+
+    public sfcraft_Logger(String source) {
+        this();
+        this.source = source;
+    }
+
+    public sfcraft_Log createLog() {
+        return this.createLog(this.source);
+    }
+
+    public sfcraft_Log createLog(Exception ex) {
+        return this.createLog(ex, this.source);
+    }
+
+    public sfcraft_Log createLog(Database.SaveResult dbSaveResult) {
+        return this.createLog(dbSaveResult, this.source);
+    }
+
+    public sfcraft_Log createLog(String source) {
+        sfcraft_Log infoLog = new sfcraft_Log(source);
+        this.storedLogs.add(infoLog);
         return infoLog;
     }
 
-    public static sfcraft_Log createLog(Exception ex, String scope) {
-        sfcraft_Log errLog = new sfcraft_Log(ex, scope);
-        storedLogs.add(errLog);
+    public sfcraft_Log createLog(Exception ex, String source) {
+        sfcraft_Log errLog = new sfcraft_Log(ex, source);
+        this.storedLogs.add(errLog);
         return errLog;
     }
 
-    public static sfcraft_Log createLog(Database.SaveResult dbSaveResult, String scope) {
+    public sfcraft_Log createLog(Database.SaveResult dbSaveResult, String source) {
         sfcraft_Log errLog;
-        errLog = sfcraft_Logger.createLog(scope);
+        errLog = this.createLog(source);
         errLog.setDetails(JSON.serialize(dbSaveResult.getErrors()));
-        storedLogs.add(errLog);
+        this.storedLogs.add(errLog);
         return errLog;
     }
 
-    public static void insertLogs() {
-        if(storedLogs != null && storedLogs.isEmpty() == False) {
+    public void insertLogs() {
+        if(this.storedLogs != null && this.storedLogs.isEmpty() == False) {
             List<SObject> logsToInsert = new List<SObject>();
-            for (sfcraft_Log nupayLog : storedLogs) {
+            for (sfcraft_Log nupayLog : this.storedLogs) {
                 logsToInsert.add(nupayLog.getLogRecord());
             }
             // unsafe DML because anyone should be able to create logs
             insert logsToInsert;
-            storedLogs.clear();
+            this.storedLogs.clear();
         }
     }
 
-    public static List<sfcraft_Log> getStoredLogs() {
-        return storedLogs;
+    public List<sfcraft_Log> getStoredLogs() {
+        return this.storedLogs;
     }
 }

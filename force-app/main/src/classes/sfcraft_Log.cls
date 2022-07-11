@@ -1,4 +1,4 @@
-public inherited sharing class sfcraft_Log {
+public virtual class sfcraft_Log {
     private static sfcraft_LogConfig config = new sfcraft_LogConfig();
 
     public enum Severities {
