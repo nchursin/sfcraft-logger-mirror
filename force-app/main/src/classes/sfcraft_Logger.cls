@@ -3,6 +3,7 @@ public inherited sharing class sfcraft_Logger {
     private static sfcraft_Logger singleton;
 
     private String source;
+    private sfcraft_AdditionalLogData additionalData;
 
     private List<sfcraft_Log> storedLogs {
         get {
@@ -25,8 +26,17 @@ public inherited sharing class sfcraft_Logger {
     }
 
     public sfcraft_Logger(String source) {
+        this(source, null);
+    }
+
+    public sfcraft_Logger(sfcraft_AdditionalLogData additionalData) {
+        this(null, additionalData);
+    }
+
+    public sfcraft_Logger(String source, sfcraft_AdditionalLogData additionalData) {
         this();
         this.source = source;
+        this.additionalData = additionalData;
     }
 
     public sfcraft_Log createLog() {
@@ -48,16 +58,16 @@ public inherited sharing class sfcraft_Logger {
     }
 
     public sfcraft_Log createLog(Exception ex, String source) {
-        sfcraft_Log errLog = new sfcraft_Log(ex, source);
-        this.storedLogs.add(errLog);
+        sfcraft_Log errLog = this.createLog(source);
+        errLog.setMessage(ex.getMessage());
+        errLog.setDetails(ex.getStackTraceString());
+        errLog.setSeverity(sfcraft_Log.Severities.ERROR);
         return errLog;
     }
 
     public sfcraft_Log createLog(Database.SaveResult dbSaveResult, String source) {
-        sfcraft_Log errLog;
-        errLog = this.createLog(source);
+        sfcraft_Log errLog = this.createLog(source);
         errLog.setDetails(JSON.serialize(dbSaveResult.getErrors()));
-        this.storedLogs.add(errLog);
         return errLog;
     }
 

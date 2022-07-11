@@ -13,16 +13,11 @@ public virtual class sfcraft_Log {
     private String scope;
     private Severities severity;
 
+    private sfcraft_AdditionalLogData additionalData;
+
     public sfcraft_Log(String source) {
         this.source = source;
         this.severity = Severities.INFO;
-    }
-
-    public sfcraft_Log(Exception ex, String source) {
-        this(source);
-        this.setMessage(ex.getMessage());
-        this.setDetails(ex.getStackTraceString());
-        this.setSeverity(Severities.ERROR);
     }
 
     public SObject getLogRecord() {
@@ -32,6 +27,7 @@ public virtual class sfcraft_Log {
         record.put(config.getSeverityFieldName(), this.severity);
         record.put(config.getSourceFieldName(), this.source);
         record.put(config.getScopeFieldName(), this.scope);
+        record = this.additionalData.enrichLog(record);
         return record;
     }
 
@@ -49,6 +45,14 @@ public virtual class sfcraft_Log {
 
     public void setSeverity(Severities severity) {
         this.severity = severity;
+    }
+
+    public Object getAdditionalField(String fieldName) {
+        return this.additionalData.getField(fieldName);
+    }
+
+    public void setAdditionalField(String fieldName, Object value) {
+        this.additionalData.setField(fieldName, value);
     }
 
     private String trimMessage(String msg) {
