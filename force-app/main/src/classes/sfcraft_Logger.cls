@@ -52,7 +52,13 @@ public inherited sharing class sfcraft_Logger {
     }
 
     public sfcraft_Log createLog(String source) {
-        sfcraft_AdditionalLogData additionalData = (sfcraft_AdditionalLogData) this.additionalDataType.newInstance();
+        if (null == source) {
+            throw new IllegalArgumentException('Source is required for log');
+        }
+        sfcraft_AdditionalLogData additionalData;
+        if (null != this.additionalDataType) {
+            additionalData = (sfcraft_AdditionalLogData) this.additionalDataType.newInstance();
+        }
         sfcraft_Log infoLog = new sfcraft_Log(source, additionalData);
         this.storedLogs.add(infoLog);
         return infoLog;

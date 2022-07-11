@@ -51,10 +51,16 @@ public virtual class sfcraft_Log {
     }
 
     public Object getAdditionalField(String fieldName) {
+        if (null == this.additionalData) {
+            throw new IllegalArgumentException('No additional data set for log');
+        }
         return this.additionalData.getField(fieldName);
     }
 
     public void setAdditionalField(String fieldName, Object value) {
+        if (null == this.additionalData) {
+            throw new IllegalArgumentException('No additional data set for log');
+        }
         this.additionalData.setField(fieldName, value);
     }
 
